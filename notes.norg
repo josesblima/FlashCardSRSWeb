@@ -16,3 +16,20 @@ back_img
 back_sound
 
 eval $(poetry env activate)
+
+* PostgreSQL:
+  - db: flashcards_db
+  - user: flashcards_use
+  - \\c flashcards_db # Connects to db
+  - \\du # Lists users
+
+
+In your application, use a package like python-dotenv to load these environment variables:
+from dotenv import load_dotenv
+load_dotenv()  # This loads the variables from .env
+
+import os
+database_url = os.getenv("DATABASE_URL")
+* .env
+  DATABASE_URL=postgresql://flashcards_user:password_goes_here@localhost/flashcards_db
+
