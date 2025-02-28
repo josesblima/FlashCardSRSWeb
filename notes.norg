@@ -14,3 +14,5 @@ title
 back_text
 back_img
 back_sound
+
+eval $(poetry env activate)
