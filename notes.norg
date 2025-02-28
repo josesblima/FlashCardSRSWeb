@@ -1,0 +1,16 @@
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+sudo -u postgres psql
+
+class Card():
+id
+--front--
+title
+front_tip
+front_img
+front_sound
+--back--
+title
+back_text
+back_img
+back_sound
