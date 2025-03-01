@@ -1,7 +1,3 @@
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
-sudo -u postgres psql
-
 class Card():
 id
 --front--
@@ -18,6 +14,10 @@ back_sound
 eval $(poetry env activate)
 
 * PostgreSQL:
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+sudo -u postgres psql
+
   - db: flashcards_db
   - user: flashcards_use
   - \\c flashcards_db # Connects to db

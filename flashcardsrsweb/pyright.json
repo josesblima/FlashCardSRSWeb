@@ -1,0 +1,4 @@
+echo '{
+  "venvPath": ".",
+  "venv": ".venv"
+}' > pyrightconfig.json
