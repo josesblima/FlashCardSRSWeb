@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+from flashcardsrsweb.models.registry import mapper_registry
 
 load_dotenv()
 # Get database URL from environment variables or use a default for local development

@@ -19,9 +19,11 @@ sudo systemctl enable postgresql
 sudo -u postgres psql
 
   - db: flashcards_db
+  - test db: flashcards_test_db
   - user: flashcards_use
   - \\c flashcards_db # Connects to db
   - \\du # Lists users
+  - \\list # Lists databases
 
 
 In your application, use a package like python-dotenv to load these environment variables:
@@ -33,3 +35,10 @@ database_url = os.getenv("DATABASE_URL")
 * .env
   DATABASE_URL=postgresql://flashcards_user:password_goes_here@localhost/flashcards_db
 
+* Alembic
+  - poetry run alembic revision --autogenerate -m "Create flashcard table"
+* SQLAlchemy
+  - Core Approach/Classical Mapping instead of Metadata/schema-centric approach
+
+
+  lua vim.lsp.buf.code_action()

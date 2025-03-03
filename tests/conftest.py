@@ -4,12 +4,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flashcardsrsweb.db.session import Base, get_db
 
-# Use a test database URL - either a separate test database or in-memory SQLite for simple tests
 TEST_DATABASE_URL = "postgresql://flashcards_user:my_password@localhost/flashcards_test_db"
 
 @pytest.fixture(scope="session")
 def test_engine():
-    # Create test engine
     engine = create_engine(TEST_DATABASE_URL)
     yield engine
     # Cleanup after all tests
