@@ -1,39 +1,16 @@
-import os
-from typing import Generator
-from dotenv import load_dotenv
+# flashcardsrsweb/db/session.py
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+from flashcardsrsweb.db.engine import EngineManager
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
-from flashcardsrsweb.models.registry import mapper_registry
-
-load_dotenv()
-# Get database URL from environment variables or use a default for local development
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://flashcards_user:password@localhost/flashcards_db")
-
-engine = create_engine(
-    DATABASE_URL,
-    echo=True, # Set to False in prod
-    pool_pre_ping=True,
-    pool_size=5,
-    max_overflow=10
-)
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = mapper_registry.generate_base()
-
-def get_db() -> Generator[Session, None, None]:
-    """
-    Dependency for FastAPI to get database session.
-    Yields a database session and ensures proper closing after use.
-    
-    Usage in FastAPI:
-        @app.get("/users/")
-        def read_users(db: Session = Depends(get_db)):
-            ...
-    """
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+class SessionManager:
+    @staticmethod
+    async def get_session() -> AsyncSession:
+        async_session = async_sessionmaker(
+            bind=EngineManager.get_engine(),
+            class_=AsyncSession,
+            expire_on_commit=False,
+            autoflush=False,
+            autocommit=False
+        )
+        async with async_session() as session:
+            return session

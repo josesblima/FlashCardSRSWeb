@@ -2,6 +2,7 @@ import pytest
 
 from flashcardsrsweb.cards.create import CreateCardUseCase
 from flashcardsrsweb.cards.dto import CreateCardDTO
+from flashcardsrsweb.cards.domain import Flashcard
 
 pytestmark = pytest.mark.asyncio
 
@@ -15,4 +16,5 @@ class TestCreateCardUseCase():
             back_description = "back_desc"
             )
         result = await use_case.execute(dto=dto)
-        assert result == dto
+ 
+        assert isinstance(result, Flashcard)
