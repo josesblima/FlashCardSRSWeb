@@ -37,6 +37,7 @@ database_url = os.getenv("DATABASE_URL")
 
 * Alembic
   - poetry run alembic revision --autogenerate -m "Create flashcard table"
+  - poetry run alembic upgrade head # runs the upgrade funcion in /migrations/version.py
 * SQLAlchemy
   - Core Approach/Classical Mapping instead of Metadata/schema-centric approach
 
