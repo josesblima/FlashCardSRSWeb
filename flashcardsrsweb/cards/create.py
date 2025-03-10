@@ -3,9 +3,9 @@ from flashcardsrsweb.cards.dto import CreateCardDTO
 from flashcardsrsweb.db.uow import UnitOfWork
 
 class CreateCardUseCase():
-    def __init__(self, *, uow: UnitOfWork)
-        self._uow = uow
-    async def execute(self, dto: CreateCardDTO) -> CreateCardDTO:
+    def __init__(self, *, uow: UnitOfWork = None):
+        self._uow = uow if uow is not None else UnitOfWork()
+    async def execute(self, *, dto: CreateCardDTO) -> CreateCardDTO:
         card = Flashcard(
             front_title=dto.front_title,
             front_description=dto.front_description,

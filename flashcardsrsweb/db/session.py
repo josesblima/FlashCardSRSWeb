@@ -1,6 +1,7 @@
 # flashcardsrsweb/db/session.py
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from flashcardsrsweb.db.engine import EngineManager
+from flashcardsrsweb.db.base import Base
 
 class SessionManager:
     @staticmethod

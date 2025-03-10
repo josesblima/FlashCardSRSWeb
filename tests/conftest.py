@@ -1,37 +1,52 @@
 # tests/conftest.py
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from flashcardsrsweb.db.session import Base, get_db
+import os
+from dotenv import load_dotenv
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
-TEST_DATABASE_URL = "postgresql://flashcards_user:my_password@localhost/flashcards_test_db"
+# Import Base from the new location
+from flashcardsrsweb.db.base import Base
 
+# Load environment variables
+load_dotenv()
+
+# Constants for test database
+TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "postgresql://flashcards_user:my_password@localhost/flashcards_test_db")
+TEST_ASYNC_DATABASE_URL = TEST_DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+
+# Async fixtures for tests
 @pytest.fixture(scope="session")
-def test_engine():
-    engine = create_engine(TEST_DATABASE_URL)
+async def async_test_engine():
+    """Create a test async engine for the whole test session."""
+    engine = create_async_engine(TEST_ASYNC_DATABASE_URL)
     yield engine
     # Cleanup after all tests
-    engine.dispose()
+    await engine.dispose()
 
 @pytest.fixture(scope="function")
-def test_db(test_engine):
+async def async_test_db(async_test_engine):
+    """Create all tables before test and drop them after."""
     # Create all tables
-    Base.metadata.create_all(bind=test_engine)
+    async with async_test_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    
     # Run tests
     yield
+    
     # Drop all tables after test
-    Base.metadata.drop_all(bind=test_engine)
+    async with async_test_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
 
 @pytest.fixture(scope="function")
-def db_session(test_engine, test_db):
+async def db_session(async_test_engine, async_test_db):
+    """Create a new test database session for each test."""
     # Create a new session for a test
-    connection = test_engine.connect()
-    transaction = connection.begin()
-    session = sessionmaker(bind=connection)()
-    
-    yield session
-    
-    # Close session and rollback transaction after test
-    session.close()
-    transaction.rollback()
-    connection.close()
+    async with async_test_engine.connect() as connection:
+        await connection.begin()
+        session = AsyncSession(bind=connection, expire_on_commit=False)
+        
+        yield session
+        
+        # Close session and rollback transaction after test
+        await session.close()
+        await connection.rollback()
