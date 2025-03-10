@@ -20,7 +20,7 @@ class CardRepositorySQLAlchemy:
             select(Flashcard)
             .where(Flashcard.id == card_id)
         )
-        card = await self.session.scalar(statement)
+        card = await self._session.scalar(statement)
         # Raise error if not statement
         return card
         

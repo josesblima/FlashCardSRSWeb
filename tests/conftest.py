@@ -7,6 +7,10 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 # Import Base from the new location
 from flashcardsrsweb.db.base import Base
 
+# Import your mappings to ensure they're registered
+import flashcardsrsweb.models.mappings
+from flashcardsrsweb.cards.domain import Flashcard
+
 # Load environment variables
 load_dotenv()
 
