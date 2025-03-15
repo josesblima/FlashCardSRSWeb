@@ -3,6 +3,7 @@ import pytest
 from flashcardsrsweb.cards.create import CreateCardUseCase
 from flashcardsrsweb.cards.dto import CreateCardDTO
 from flashcardsrsweb.cards.domain import Flashcard
+import flashcardsrsweb.models.mappings  # Is this really necessary?
 
 pytestmark = pytest.mark.asyncio
 

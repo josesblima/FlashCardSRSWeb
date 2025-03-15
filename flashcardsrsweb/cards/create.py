@@ -1,10 +1,13 @@
+import inject
+
 from flashcardsrsweb.cards.domain import Flashcard
 from flashcardsrsweb.cards.dto import CreateCardDTO
-from flashcardsrsweb.db.uow import UnitOfWork
+from flashcardsrsweb.db.uow_interface import UnitOfWorkInterface
 
 class CreateCardUseCase():
-    def __init__(self, *, uow: UnitOfWork = None):
-        self._uow = uow if uow is not None else UnitOfWork()
+    @inject.autoparams()
+    def __init__(self, *, uow: UnitOfWorkInterface):
+        self._uow = uow
     async def execute(self, *, dto: CreateCardDTO) -> CreateCardDTO:
         card = Flashcard(
             front_title=dto.front_title,

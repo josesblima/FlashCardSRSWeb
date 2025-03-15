@@ -1,31 +1,29 @@
 # tests/mocks/uow.py
-from unittest.mock import AsyncMock, MagicMock
-from typing import Optional
-from flashcardsrsweb.db.uow import UnitOfWork
+from typing import Self
+from unittest.mock import AsyncMock
 
-class MockUnitOfWork(UnitOfWork):
-    """
-    A mock implementation of UnitOfWork for testing.
-    This allows tests to run without a real database connection.
-    """
+class MockUnitOfWork:
+    """Mock implementation of UnitOfWork for testing."""
     
     def __init__(self):
+        # Create a mock repository with a save method
         self.cards = AsyncMock()
+        self.cards.save = AsyncMock()
+        
+        # Track context management
+        self.entered = False
+        self.exited = False
         self.committed = False
         self.rolled_back = False
     
-    async def __aenter__(self):
+    async def __aenter__(self) -> Self:
+        self.entered = True
         return self
     
     async def __aexit__(self, exc_type, exc_val, exc_tb):
+        self.exited = True
         if exc_type:
-            await self.rollback()
+            self.rolled_back = True
             return False
-        await self.commit()
-        return True
-    
-    async def commit(self):
         self.committed = True
-    
-    async def rollback(self):
-        self.rolled_back = True
+        return True

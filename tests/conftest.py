@@ -1,15 +1,16 @@
 # tests/conftest.py
 import pytest
 import os
+import inject
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
-# Import Base from the new location
+# Import models and mappings
 from flashcardsrsweb.db.base import Base
-
-# Import your mappings to ensure they're registered
 import flashcardsrsweb.models.mappings
 from flashcardsrsweb.cards.domain import Flashcard
+from flashcardsrsweb.db.uow_interface import UnitOfWorkInterface
+from tests.mocks.uow import MockUnitOfWork
 
 # Load environment variables
 load_dotenv()
@@ -18,7 +19,28 @@ load_dotenv()
 TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "postgresql://flashcards_user:my_password@localhost/flashcards_test_db")
 TEST_ASYNC_DATABASE_URL = TEST_DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
-# Async fixtures for tests
+# Configure dependency injection for tests
+@pytest.fixture(autouse=True)
+def setup_test_inject():
+    """Configure inject with test dependencies."""
+    # Save original configuration if it exists
+    original_config = None
+    if inject._config_stack:
+        original_config = inject._config_stack[-1]
+    
+    # Configure with test dependencies
+    def config(binder: inject.Binder):
+        binder.bind_to_provider(UnitOfWorkInterface, lambda: MockUnitOfWork())
+    
+    inject.clear_and_configure(config)
+    
+    yield
+    
+    # Restore original configuration if it existed
+    if original_config:
+        inject._config_stack[-1] = original_config
+
+# SQLAlchemy test fixtures
 @pytest.fixture(scope="session")
 async def async_test_engine():
     """Create a test async engine for the whole test session."""
