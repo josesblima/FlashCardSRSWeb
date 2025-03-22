@@ -1,2 +1,1 @@
-#!/bin/bash
-source .venv/bin/activate
+/home/jblima/programming/flashcardsrsweb/.venv/bin/activate

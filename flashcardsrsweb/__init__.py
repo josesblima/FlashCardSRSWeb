@@ -3,8 +3,7 @@
 FlashCardSRSWeb - High customizability and low friction system to memorize anything!
 """
 
-from inject import Binder
-from flashcardsrsweb.inject import uow_config
+from flashcardsrsweb.inject import configure_inject
 
 # Initialize dependency injection when the package is imported
-uow_config()
+configure_inject()

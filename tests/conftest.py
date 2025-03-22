@@ -23,10 +23,12 @@ TEST_ASYNC_DATABASE_URL = TEST_DATABASE_URL.replace("postgresql://", "postgresql
 @pytest.fixture(autouse=True)
 def setup_test_inject():
     """Configure inject with test dependencies."""
-    # Save original configuration if it exists
-    original_config = None
-    if inject._config_stack:
-        original_config = inject._config_stack[-1]
+    # Store the original configuration key to restore after test
+    try:
+        inject.get_injector()
+        was_configured = True
+    except inject.InjectorException:
+        was_configured = False
     
     # Configure with test dependencies
     def config(binder: inject.Binder):
@@ -36,20 +38,24 @@ def setup_test_inject():
     
     yield
     
+    # Clean up to avoid affecting other tests
+    inject.clear()
+    
     # Restore original configuration if it existed
-    if original_config:
-        inject._config_stack[-1] = original_config
+    if was_configured:
+        from flashcardsrsweb.inject import configure_inject
+        configure_inject()
 
 # SQLAlchemy test fixtures
-@pytest.fixture(scope="session")
+@pytest.fixture
 async def async_test_engine():
-    """Create a test async engine for the whole test session."""
+    """Create a test async engine for each test."""
     engine = create_async_engine(TEST_ASYNC_DATABASE_URL)
     yield engine
-    # Cleanup after all tests
+    # Cleanup after test
     await engine.dispose()
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 async def async_test_db(async_test_engine):
     """Create all tables before test and drop them after."""
     # Create all tables
@@ -63,7 +69,7 @@ async def async_test_db(async_test_engine):
     async with async_test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 async def db_session(async_test_engine, async_test_db):
     """Create a new test database session for each test."""
     # Create a new session for a test
