@@ -2,13 +2,23 @@
 from typing import Self
 from unittest.mock import AsyncMock
 
+from flashcardsrsweb.cards.domain import Flashcard
+
 class MockUnitOfWork:
     """Mock implementation of UnitOfWork for testing."""
     
     def __init__(self):
         # Create a mock repository with a save method
         self.cards = AsyncMock()
-        self.cards.save = AsyncMock()
+        
+        # Configure the save method to return a proper Flashcard instance
+        async def mock_save(card: Flashcard) -> Flashcard:
+            # This returns the same card object but with an ID set
+            # (simulating what the database would do)
+            card.id = 1  # Set a mock ID
+            return card
+            
+        self.cards.save = mock_save
         
         # Track context management
         self.entered = False
