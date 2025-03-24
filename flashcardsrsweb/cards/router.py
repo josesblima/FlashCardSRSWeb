@@ -4,6 +4,8 @@ from fastapi.responses import JSONResponse
 
 from flashcardsrsweb.cards.create import CreateCardUseCase
 from flashcardsrsweb.cards.dto import CreateCardDTO
+from flashcardsrsweb.cards.read import ReadCardUseCase, ReadListCardUseCase
+from flashcardsrsweb.utils.json_response import JsonResponse
 
 router = APIRouter(
     prefix="/cards",
@@ -20,4 +22,22 @@ async def create(
         dto: CreateCardDTO,
 ):
     result = await CreateCardUseCase().execute(dto=dto)
-    return json_response(result)
+    return JsonResponse.obj_to_json(result)
+
+@router.post(
+    '/{card_id}',
+    name='Get Card',
+)
+async def get(
+        card_id: int
+):
+    result = await ReadCardUseCase().execute(card_id=card_id)
+    return JsonResponse.obj_to_json(result)
+
+@router.get(
+    '',
+    name='List Cards',
+)
+async def list():
+    result = await ReadListCardUseCase().execute()
+    return JsonResponse.obj_to_json(result)

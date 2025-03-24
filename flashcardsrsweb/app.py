@@ -1,9 +1,11 @@
-# flashcardsrsweb/app.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from flashcardsrsweb.cards.router import router as cards_router
+from flashcardsrsweb.db.setup import setup_database
 
+setup_result = setup_database()
+print(f'Database initialization: {setup_result}')
 # Create FastAPI app
 app = FastAPI(
     title="FlashCards SRS Web",

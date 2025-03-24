@@ -17,6 +17,7 @@ alembic = ">=1.14.1,<2.0.0"
 python-dotenv = ">=1.0.1,<2.0.0"
 pytest-asyncio = "^0.25.3"
 inject = "^5.2.1"
+py-automapper = "^2.2.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.3.4,<9.0.0"

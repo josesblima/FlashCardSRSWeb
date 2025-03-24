@@ -24,3 +24,10 @@ class CardRepositorySQLAlchemy:
         # Raise error if not statement
         return card
         
+    async def list(self):
+        statement = (
+            select(Flashcard)
+        )
+
+        result = await self._session.scalars(statement)
+        return result.unique().all()
