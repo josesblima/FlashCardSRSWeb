@@ -56,4 +56,5 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgresql://user:password@localhost/flashcards_test_db
+          TESTING: true
         run: poetry run pytest
