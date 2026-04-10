@@ -1,9 +1,6 @@
 # flashcardsrsweb/db/engine.py
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 class EngineManager:
     _engine: AsyncEngine = None

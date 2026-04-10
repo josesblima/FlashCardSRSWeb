@@ -7,13 +7,13 @@ class CreateCardDTO():
     back_description: str
 
 @dataclass
-class CardReadDTO():
+class ReadCardDTO():
     front_title: str
     front_description: str
     back_description: str
     
 @dataclass
-class CardReadListDTO():
+class ReadCardListDTO():
     front_title: str
     front_description: str
     back_description: str

@@ -26,14 +26,11 @@ sudo -u postgres psql
   - \\list # Lists databases
 
 
-In your application, use a package like python-dotenv to load these environment variables:
-from dotenv import load_dotenv
-load_dotenv()  # This loads the variables from .env
-
-import os
-database_url = os.getenv("DATABASE_URL")
-* .env
-  DATABASE_URL=postgresql://flashcards_user:password_goes_here@localhost/flashcards_db
+* Environment Variables
+  - These are separate into two files, for local testing and production (.env.test and .env)
+  - The environment variables are initially populated to the os.environ through the load_dotenv() in main.py
+  - Any time we need access an environment variable, `import os` and os.getenv("VARIABLE_NAME")
+  - In our main conftest.py we `load_dotenv('.env.test', override=True)`, which specifically loads the test file instead and overrides the environment variables loaded from .env at startup
 
 * Alembic
   - poetry run alembic revision --autogenerate -m "Create flashcard table"

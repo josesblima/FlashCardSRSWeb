@@ -1,7 +1,7 @@
 from typing import Protocol
 
 from flashcardsrsweb.cards.domain import Flashcard
-from flashcardsrsweb.cards.dto import CardReadListDTO
+from flashcardsrsweb.cards.dto import ReadCardListDTO
 
 class CardRepositoryInterface(Protocol):
     async def save(self, * card: Flashcard) -> Flashcard:
@@ -10,5 +10,5 @@ class CardRepositoryInterface(Protocol):
     async def get(self, * card_id: int) -> Flashcard:
         raise NotImplementedError
         
-    async def list(self) -> list[CardReadListDTO]:
+    async def list(self) -> list[ReadCardListDTO]:
         raise NotImplementedError
