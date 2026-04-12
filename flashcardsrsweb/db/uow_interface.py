@@ -8,6 +8,6 @@ class UnitOfWorkInterface(Protocol):  # TODO read up on Protocol class
 
     async def __aenter__(self) -> Self:
         raise NotImplementedError
-        
-    async def __aexit__(self) -> Self:
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
         raise NotImplementedError

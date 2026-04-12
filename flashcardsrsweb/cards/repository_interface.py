@@ -4,11 +4,14 @@ from flashcardsrsweb.cards.domain import Flashcard
 from flashcardsrsweb.cards.dto import ReadCardListDTO
 
 class CardRepositoryInterface(Protocol):
-    async def save(self, * card: Flashcard) -> Flashcard:
+    async def save(self, *, card: Flashcard) -> Flashcard:
         raise NotImplementedError
         
-    async def get(self, * card_id: int) -> Flashcard:
+    async def get(self, *, card_id: int) -> Flashcard:
         raise NotImplementedError
         
     async def list(self) -> list[ReadCardListDTO]:
+        raise NotImplementedError
+
+    async def delete(self, *, card_id: int) -> None:
         raise NotImplementedError

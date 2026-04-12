@@ -1,19 +1,27 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
-@dataclass
-class CreateCardDTO():
+
+class CreateCardDTO(BaseModel):
     front_title: str
     front_description: str
     back_description: str
 
-@dataclass
-class ReadCardDTO():
+
+class UpdateCardDTO(BaseModel):
+    id: int
     front_title: str
     front_description: str
     back_description: str
-    
-@dataclass
-class ReadCardListDTO():
+
+
+class ReadCardDTO(BaseModel):
     front_title: str
     front_description: str
     back_description: str
+
+
+class ReadCardListDTO(BaseModel):
+    front_title: str
+    front_description: str
+    back_description: str
+

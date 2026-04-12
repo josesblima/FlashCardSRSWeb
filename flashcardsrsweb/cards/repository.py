@@ -1,7 +1,7 @@
 from flashcardsrsweb.cards.domain import Flashcard
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import delete, select
 
 from flashcardsrsweb.cards.dto import CreateCardDTO
 
@@ -18,11 +18,11 @@ class CardRepositorySQLAlchemy:
     async def get(self, *, card_id: int) -> Flashcard:
         statement = (
             select(Flashcard)
-            .where(Flashcard.id == card_id)
+            .where(Flashcard.id == card_id)  # type: ignore
         )
         card = await self._session.scalar(statement)
         # Raise error if not statement
-        return card
+        return card  # type: ignore
         
     async def list(self):
         statement = (
@@ -31,3 +31,11 @@ class CardRepositorySQLAlchemy:
 
         result = await self._session.scalars(statement)
         return result.unique().all()
+
+    async def delete(self, *, card_id: int) -> None:
+        statement = (
+            delete(Flashcard)
+            .where(Flashcard.id == card_id)  # type: ignore
+            )
+        await self._session.execute(statement)
+
