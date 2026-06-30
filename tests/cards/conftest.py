@@ -14,4 +14,3 @@ async def persisted_card():
     async with UnitOfWork() as uow:
         persisted = await uow.cards.save(card=card)
     yield persisted
-    assert 0 == 0

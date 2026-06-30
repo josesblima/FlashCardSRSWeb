@@ -4,10 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from flashcardsrsweb.db.session import SessionManager
 from flashcardsrsweb.cards.repository import CardRepositorySQLAlchemy
+from flashcardsrsweb.users.repository import UserRepositorySQLAlchemy
 
 class UnitOfWork:
     _session: AsyncSession
     cards: CardRepositorySQLAlchemy
+    users: UserRepositorySQLAlchemy
 
     async def __aenter__(self) -> Self:
         self._session = await SessionManager.get_session()
@@ -25,3 +27,4 @@ class UnitOfWork:
 
     def _initialize_repositories(self):
         self.cards = CardRepositorySQLAlchemy(session=self._session)
+        self.users = UserRepositorySQLAlchemy(session=self._session)

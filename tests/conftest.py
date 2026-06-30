@@ -24,7 +24,7 @@ def _inject_config():
 async def clean_db():
     yield
     async with UnitOfWork() as uow:
-        await uow._session.execute(text("TRUNCATE TABLE flashcards RESTART IDENTITY CASCADE"))
+        await uow._session.execute(text("TRUNCATE TABLE flashcards, users RESTART IDENTITY CASCADE"))
 
 @pytest.fixture()
 def uow() -> UnitOfWorkInterface:
