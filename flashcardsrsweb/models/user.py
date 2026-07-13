@@ -4,7 +4,7 @@ from .registry import mapper_registry
 users_table = Table(
     'users',
     mapper_registry.metadata,
-    Column('id', Integer(), primary_key=True, autoincrement=True, index=True),
+    Column('id', Integer(), primary_key=True, autoincrement=True),
     Column('oauth_provider', Text(), nullable=False),
     Column('oauth_provider_id', Text(), nullable=False),
     Column('email', Text(), nullable=False, unique=True),

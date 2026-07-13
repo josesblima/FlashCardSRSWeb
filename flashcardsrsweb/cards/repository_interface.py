@@ -15,3 +15,6 @@ class CardRepositoryInterface(Protocol):
 
     async def delete(self, *, card_id: int) -> None:
         raise NotImplementedError
+
+class CardRepositoryNotFoundError(Exception):
+    pass

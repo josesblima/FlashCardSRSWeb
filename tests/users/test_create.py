@@ -5,8 +5,6 @@ from flashcardsrsweb.users.domain import User
 from flashcardsrsweb.users.dto import CreateUserDTO
 from flashcardsrsweb.users.exceptions import UserAlreadyExistsError
 
-pytestmark = pytest.mark.asyncio
-
 class TestCreateUserUseCase():
     create_dto = CreateUserDTO(
             oauth_provider = 'Google',
@@ -14,7 +12,6 @@ class TestCreateUserUseCase():
             email = 'asdf@asdf.com',
             display_name = 'asdf'
             )
-    @pytest.mark.asyncio
     async def test_when_valid_dto_should_persist(self):
         dto = CreateUserDTO(
             oauth_provider = 'Google',

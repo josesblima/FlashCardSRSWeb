@@ -8,7 +8,13 @@ from flashcardsrsweb.users.domain import User
 mapper_registry.map_imperatively(
     Flashcard,
     flashcards_table,
-    properties={}
+    properties={
+        'user': relationship(
+            'User',
+            primaryjoin='and_(Flashcard.user_id == User.id)',
+            lazy='noload',
+            ),
+        }
 )
 
 mapper_registry.map_imperatively(

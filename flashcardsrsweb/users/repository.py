@@ -10,7 +10,6 @@ class UserRepositorySQLAlchemy:
     async def save(self, *, user: User) -> User:
         self._session.add(user)
         await self._session.flush()
-        user = await self.get(user_id=user.id)
         return user
 
     async def get(self, *, user_id: int) -> User:

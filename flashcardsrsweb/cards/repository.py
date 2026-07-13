@@ -3,6 +3,8 @@ from flashcardsrsweb.cards.domain import Flashcard
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import delete, select
 
+from flashcardsrsweb.cards.repository_interface import CardRepositoryNotFoundError
+
 class CardRepositorySQLAlchemy:
     def __init__(self, *, session: AsyncSession):
         self._session = session
@@ -10,7 +12,6 @@ class CardRepositorySQLAlchemy:
     async def save(self, *, card: Flashcard) -> Flashcard:
         self._session.add(card)
         await self._session.flush()
-        card = await self.get(card_id=card.id)
         return card
 
     async def get(self, *, card_id: int) -> Flashcard:
@@ -18,8 +19,8 @@ class CardRepositorySQLAlchemy:
             select(Flashcard)
             .where(Flashcard.id == card_id)  # type: ignore
         )
-        card = await self._session.scalar(statement)
-        # Raise error if not statement
+        if not (card := await self._session.scalar(statement)):
+            raise CardRepositoryNotFoundError # Catch this with CardNotFoundError in the usecase
         return card  # type: ignore
         
     async def list(self):

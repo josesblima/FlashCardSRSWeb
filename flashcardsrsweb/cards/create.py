@@ -12,6 +12,7 @@ class CreateCardUseCase():
 
     async def execute(self, *, dto: CreateCardDTO) -> Flashcard:
         card = Flashcard(
+            user_id=dto.user_id,
             front_title=dto.front_title,
             front_description=dto.front_description,
             back_description=dto.back_description
