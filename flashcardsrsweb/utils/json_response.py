@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 
 # The response DTOs have to be converted to a dictionary before JSONResponse(ing)
 class JsonResponse():
+    @staticmethod
     def obj_to_json(obj):
         if is_dataclass(obj):
             return JSONResponse(

@@ -26,4 +26,7 @@ psql:
 test:
 	poetry run pytest
 
+run: ## Run server application
+	@poetry run uvicorn flashcardsrsweb.app:app --reload
+
 .PHONY: test-db-start test-db-stop test
